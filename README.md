@@ -4,7 +4,9 @@ Python获取bilibili直播弹幕的库，使用WebSocket协议，支持web端和
 
 [协议解释](https://open-live.bilibili.com/document/657d8e34-f926-a133-16c0-300c1afc6e6b)
 
-基于本库开发的一个应用：[blivechat](https://github.com/xfgryujk/blivechat)
+根据个人需求基于blivedm原版修改。格式化输出信息流，使用user_toast代替guard_buy。
+
+**只改了web端。**
 
 ## 使用说明
 
