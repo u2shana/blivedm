@@ -8,14 +8,12 @@ import aiohttp
 
 import blivedm
 import blivedm.models.web as web_models
+from datetime import datetime
+import os
 
 # 直播间ID的取值看直播间URL
 TEST_ROOM_IDS = [
-    12235923,
-    14327465,
-    21396545,
-    21449083,
-    23105590,
+    1376666,
 ]
 
 # 这里填一个已登录账号的cookie的SESSDATA字段的值。不填也可以连接，但是收到弹幕的用户名会打码，UID会变成0
@@ -23,6 +21,16 @@ SESSDATA = ''
 
 session: Optional[aiohttp.ClientSession] = None
 
+log_file_path = os.path.join(os.getcwd(), 'logs', 'gift.log')
+
+def log_message(message):
+    full_message = f"{message}"
+    print(full_message)  # 打印到控制台
+    try:
+        with open(log_file_path, 'a', encoding='utf-8') as log_file:  # 以追加模式打开文件
+            log_file.write(full_message + '\n')  # 写入消息并换行
+    except IOError as e:
+        print(f"写入日志失败: {e}")
 
 async def main():
     init_session()
@@ -32,7 +40,22 @@ async def main():
     finally:
         await session.close()
 
-
+def ms_timestamp(timestamp: int) -> str:
+    # 将时间戳从毫秒转换为秒
+    time_in_seconds = timestamp / 1000.0
+    # 创建 datetime 对象
+    readable_time = datetime.fromtimestamp(time_in_seconds)
+    # 格式化为字符串，保留到毫秒
+    ms_time = readable_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+    return ms_time
+	
+def s_timestamp(timestamp: int) -> str:
+    # 创建 datetime 对象
+    readable_time = datetime.fromtimestamp(timestamp)
+    # 格式化为字符串，保留到毫秒
+    s_time = readable_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+    return s_time
+	
 def init_session():
     cookies = http.cookies.SimpleCookie()
     cookies['SESSDATA'] = SESSDATA
@@ -41,7 +64,6 @@ def init_session():
     global session
     session = aiohttp.ClientSession()
     session.cookie_jar.update_cookies(cookies)
-
 
 async def run_single_client():
     """
@@ -62,7 +84,6 @@ async def run_single_client():
     finally:
         await client.stop_and_close()
 
-
 async def run_multi_clients():
     """
     演示同时监听多个直播间
@@ -82,32 +103,22 @@ async def run_multi_clients():
             client.stop_and_close() for client in clients
         ))
 
-
 class MyHandler(blivedm.BaseHandler):
-    # # 演示如何添加自定义回调
-    # _CMD_CALLBACK_DICT = blivedm.BaseHandler._CMD_CALLBACK_DICT.copy()
-    #
-    # # 入场消息回调
-    # def __interact_word_callback(self, client: blivedm.BLiveClient, command: dict):
-    #     print(f"[{client.room_id}] INTERACT_WORD: self_type={type(self).__name__}, room_id={client.room_id},"
-    #           f" uname={command['data']['uname']}")
-    # _CMD_CALLBACK_DICT['INTERACT_WORD'] = __interact_word_callback  # noqa
-
     def _on_heartbeat(self, client: blivedm.BLiveClient, message: web_models.HeartbeatMessage):
-        print(f'[{client.room_id}] 心跳')
-
+        pass
+		
     def _on_danmaku(self, client: blivedm.BLiveClient, message: web_models.DanmakuMessage):
-        print(f'[{client.room_id}] {message.uname}：{message.msg}')
-
+        log_message(f'[{s_timestamp(message.timestamp / 1000.0)}] [{client.room_id}] uid="{message.uid}" user="{message.uname}"： {message.msg}')
+		
     def _on_gift(self, client: blivedm.BLiveClient, message: web_models.GiftMessage):
-        print(f'[{client.room_id}] {message.uname} 赠送{message.gift_name}x{message.num}'
-              f' （{message.coin_type}瓜子x{message.total_coin}）')
+        cointype = "金" if message.coin_type == "gold" else "银"
+        log_message(f'<gift ts=" "[{s_timestamp(message.timestamp)}] [{client.room_id}] uid="{message.uid}]" user="{message.uname}" giftname="{message.gift_name}" giftcount="{message.num}" cointype="{cointype}瓜子" price="{message.total_coin}">')
 
     def _on_buy_guard(self, client: blivedm.BLiveClient, message: web_models.GuardBuyMessage):
-        print(f'[{client.room_id}] {message.username} 购买{message.gift_name}')
-
+        log_message(f'<toast ts=" "[{s_timestamp(message.start_time)}] [{client.room_id}] uid="{message.uid}" user="{message.username}" unit="{message.unit}" role="{message.role_name}" count="{message.num}" price="{message.price}" level="{message.guard_level}" {message.toast_msg}>')
+		
     def _on_super_chat(self, client: blivedm.BLiveClient, message: web_models.SuperChatMessage):
-        print(f'[{client.room_id}] 醒目留言 ¥{message.price} {message.uname}：{message.message}')
+        log_message(f'<sc ts=" "[{s_timestamp(message.start_time)}] [{client.room_id}] time="{message.time}" price="{message.price * 1000}" uid="{message.uid}" user="{message.uname}"： {message.message}>')
 
 
 if __name__ == '__main__':

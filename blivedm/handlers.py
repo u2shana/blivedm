@@ -84,7 +84,7 @@ class BaseHandler(HandlerInterface):
         # 有人送礼
         'SEND_GIFT': _make_msg_callback('_on_gift', web_models.GiftMessage),
         # 有人上舰
-        'GUARD_BUY': _make_msg_callback('_on_buy_guard', web_models.GuardBuyMessage),
+        'USER_TOAST_MSG': _make_msg_callback('_on_buy_guard', web_models.GuardBuyMessage),
         # 醒目留言
         'SUPER_CHAT_MESSAGE': _make_msg_callback('_on_super_chat', web_models.SuperChatMessage),
         # 删除醒目留言
@@ -120,7 +120,7 @@ class BaseHandler(HandlerInterface):
         if cmd not in self._CMD_CALLBACK_DICT:
             # 只有第一次遇到未知cmd时打日志
             if cmd not in logged_unknown_cmds:
-                logger.warning('room=%d unknown cmd=%s, command=%s', client.room_id, cmd, command)
+                #logger.warning('room=%d unknown cmd=%s, command=%s', client.room_id, cmd, command)
                 logged_unknown_cmds.add(cmd)
             return
 

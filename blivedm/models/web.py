@@ -282,8 +282,12 @@ class GuardBuyMessage:
     """单价金瓜子数"""
     gift_id: int = 0
     """礼物ID"""
-    gift_name: str = ''
-    """礼物名"""
+    role_name: str = ''
+    """身份名称"""
+    unit: str = ''
+    """购买身份时间单位"""
+    toast_msg: str = ''
+    """庆祝消息正文"""
     start_time: int = 0
     """开始时间戳，和结束时间戳相同"""
     end_time: int = 0
@@ -298,7 +302,9 @@ class GuardBuyMessage:
             num=data['num'],
             price=data['price'],
             gift_id=data['gift_id'],
-            gift_name=data['gift_name'],
+            role_name=data['role_name'],
+            unit=data['unit'],
+            toast_msg=data['toast_msg'],
             start_time=data['start_time'],
             end_time=data['end_time'],
         )
