@@ -39,15 +39,6 @@ async def main():
         await run_multi_clients()
     finally:
         await session.close()
-
-def ms_timestamp(timestamp: int) -> str:
-    # 将时间戳从毫秒转换为秒
-    time_in_seconds = timestamp / 1000.0
-    # 创建 datetime 对象
-    readable_time = datetime.fromtimestamp(time_in_seconds)
-    # 格式化为字符串，保留到毫秒
-    ms_time = readable_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
-    return ms_time
 	
 def s_timestamp(timestamp: int) -> str:
     # 创建 datetime 对象
