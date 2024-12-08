@@ -103,7 +103,7 @@ class MyHandler(blivedm.BaseHandler):
 		
     def _on_gift(self, client: blivedm.BLiveClient, message: web_models.GiftMessage):
         cointype = "金" if message.coin_type == "gold" else "银"
-        log_message(f'<gift ts=" "[{s_timestamp(message.timestamp)}] [{client.room_id}] uid="{message.uid}]" user="{message.uname}" giftname="{message.gift_name}" giftcount="{message.num}" cointype="{cointype}瓜子" price="{message.total_coin}">')
+        log_message(f'<gift ts=" "[{s_timestamp(message.timestamp)}] [{client.room_id}] uid="{message.uid}]" user="{message.uname}" giftname="{message.gift_name}" giftcount="{message.num}" cointype="{cointype}瓜子" price="{message.price}">')
 
     def _on_buy_guard(self, client: blivedm.BLiveClient, message: web_models.GuardBuyMessage):
         log_message(f'<toast ts=" "[{s_timestamp(message.start_time)}] [{client.room_id}] uid="{message.uid}" user="{message.username}" unit="{message.unit}" role="{message.role_name}" count="{message.num}" price="{message.price}" level="{message.guard_level}" {message.toast_msg}>')
