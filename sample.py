@@ -99,18 +99,21 @@ class MyHandler(blivedm.BaseHandler):
         pass
 		
     def _on_danmaku(self, client: blivedm.BLiveClient, message: web_models.DanmakuMessage):
-        log_message(f'[{s_timestamp(message.timestamp / 1000.0)}] [{client.room_id}] uid="{message.uid}" user="{message.uname}"： {message.msg}')
+        log_message(f'[{s_timestamp(message.timestamp / 1000.0)}] [{client.room_id}] uid="{message.uid}" user="{message.uname}"：{message.msg}')
 		
     def _on_gift(self, client: blivedm.BLiveClient, message: web_models.GiftMessage):
         cointype = "金" if message.coin_type == "gold" else "银"
         log_message(f'<gift ts=" "[{s_timestamp(message.timestamp)}] [{client.room_id}] uid="{message.uid}]" user="{message.uname}" giftname="{message.gift_name}" giftcount="{message.num}" cointype="{cointype}瓜子" price="{message.price}">')
 
-    def _on_buy_guard(self, client: blivedm.BLiveClient, message: web_models.GuardBuyMessage):
-        log_message(f'<toast ts=" "[{s_timestamp(message.start_time)}] [{client.room_id}] uid="{message.uid}" user="{message.username}" unit="{message.unit}" role="{message.role_name}" count="{message.num}" price="{message.price}" level="{message.guard_level}" {message.toast_msg}>')
+    def _on_user_toast_v2(self, client: blivedm.BLiveClient, message: web_models.UserToastV2Message):
+        log_message(f'<toast ts=" "[{s_timestamp(message.start_time)}] [{client.room_id}] uid="{message.uid}" user="{message.username}" unit="{message.unit}" count="{message.num}" price="{message.price}" level="{message.guard_level}" {message.toast_msg}>')
 		
     def _on_super_chat(self, client: blivedm.BLiveClient, message: web_models.SuperChatMessage):
         log_message(f'<sc ts=" "[{s_timestamp(message.start_time)}] [{client.room_id}] time="{message.time}" price="{message.price * 1000}" uid="{message.uid}" user="{message.uname}"： {message.message}>')
-
+ 
+    # def _on_interact_word(self, client: blivedm.BLiveClient, message: web_models.InteractWordMessage):
+    #     if message.msg_type == 1:
+    #         print(f'[{client.room_id}] {message.username} 进入房间')
 
 if __name__ == '__main__':
     asyncio.run(main())
