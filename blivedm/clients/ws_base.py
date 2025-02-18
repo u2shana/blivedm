@@ -306,7 +306,6 @@ class WebSocketClientBase:
                     ## 房间 {self.room_id} 连接异常
                     - 发生时间：{datetime.now().strftime('%Y-%m-%d %H:%M')}
                     """,
-                    frequency_limit=3600  # 1小时内不重复发送相同标题消息
                 )  
             await asyncio.sleep(self._get_reconnect_interval(retry_count, total_retry_count))
 
