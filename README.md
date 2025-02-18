@@ -7,6 +7,7 @@ Python获取bilibili直播弹幕的库，使用WebSocket协议，支持web端和
 根据个人需求基于blivedm原版修改，格式化输出信息流，~~使用user_toast代替guard_buy~~
 
 **~~只改了web端。~~**
+增加房间连接出错后server酱推送功能，修改push文件里面的sendkey
 
 ## 使用说明
 
