@@ -10,7 +10,7 @@ from typing import *
 import aiohttp
 import brotli
 
-from .. import handlers, utils
+from .. import handlers, utils, push
 
 logger = logging.getLogger('blivedm')
 
@@ -299,6 +299,15 @@ class WebSocketClientBase:
                 'room=%d is reconnecting, retry_count=%d, total_retry_count=%d',
                 self.room_id, retry_count, total_retry_count
             )
+            if retry_count == 10:
+                push.send(
+                    title="直播间重连告警",
+                    content=f"""
+                    ## 房间 {self.room_id} 连接异常
+                    - 发生时间：{datetime.now().strftime('%Y-%m-%d %H:%M')}
+                    """,
+                    frequency_limit=3600  # 1小时内不重复发送相同标题消息
+                )  
             await asyncio.sleep(self._get_reconnect_interval(retry_count, total_retry_count))
 
     async def _on_before_ws_connect(self, retry_count):
