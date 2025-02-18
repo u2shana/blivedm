@@ -11,6 +11,7 @@ import aiohttp
 import brotli
 
 from .. import handlers, utils, push
+from datetime import datetime
 
 logger = logging.getLogger('blivedm')
 
@@ -299,12 +300,12 @@ class WebSocketClientBase:
                 'room=%d is reconnecting, retry_count=%d, total_retry_count=%d',
                 self.room_id, retry_count, total_retry_count
             )
-            if retry_count == 10:
-                push.send(
+            if retry_count == 300:
+                await push.push.send(
                     title="直播间重连告警",
                     content=f"""
                     ## 房间 {self.room_id} 连接异常
-                    - 发生时间：{datetime.now().strftime('%Y-%m-%d %H:%M')}
+                    - 发生时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                     """,
                 )  
             await asyncio.sleep(self._get_reconnect_interval(retry_count, total_retry_count))
