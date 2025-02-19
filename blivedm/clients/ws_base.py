@@ -301,7 +301,7 @@ class WebSocketClientBase:
                 self.room_id, retry_count, total_retry_count
             )
             if retry_count == 300:
-                await push.push.send(
+                await push.send(
                     title="直播间重连告警",
                     content=f"""
                     ## 房间 {self.room_id} 连接异常
