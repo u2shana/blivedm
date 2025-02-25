@@ -95,6 +95,8 @@ class BaseHandler(HandlerInterface):
         'SUPER_CHAT_MESSAGE_DELETE': _make_msg_callback('_on_super_chat_delete', web_models.SuperChatDeleteMessage),
         # 进入房间、关注主播等互动消息
         'INTERACT_WORD': _make_msg_callback('_on_interact_word', web_models.InteractWordMessage),
+        # 指定观众禁言
+        'ROOM_BLOCK_MSG': _make_msg_callback('_on_room_block', web_models.RoomBlockMessage),
 
         #
         # 开放平台消息

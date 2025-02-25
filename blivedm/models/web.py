@@ -281,6 +281,8 @@ class GiftMessage:
     """总瓜子数"""
     tid: str = ''
     """可能是事务ID，有时和rnd相同"""
+    medal_level: int = 0
+    """粉丝牌等级"""
 
     @classmethod
     def from_command(cls, data: dict):
@@ -300,6 +302,7 @@ class GiftMessage:
             coin_type=data['coin_type'],
             total_coin=data['total_coin'],
             tid=data['tid'],
+            medal_level=data['medal_info']['medal_level'],
         )
 
 
@@ -438,6 +441,8 @@ class SuperChatMessage:
     """背景图URL"""
     background_price_color: str = ''
     """背景价格颜色，'#rrggbb'"""
+    medal_level: int = 0
+    """粉丝牌等级"""
 
     @classmethod
     def from_command(cls, data: dict):
@@ -461,6 +466,7 @@ class SuperChatMessage:
             background_icon=data['background_icon'],
             background_image=data['background_image'],
             background_price_color=data['background_price_color'],
+            medal_level=data['medal_info']['medal_level'],
         )
 
 
@@ -507,4 +513,28 @@ class InteractWordMessage:
             face=user_base_info['face'],
             timestamp=data['timestamp'],
             msg_type=data['msg_type'],
+        )
+
+@dataclasses.dataclass
+class RoomBlockMessage:
+    """
+    进入房间、关注主播等互动消息
+    """
+
+    uid: int = 0
+    """用户ID"""
+    uname: str = ''
+    """用户名"""
+    operator: int = ''
+    """操作者"""
+    vaild_period: str = ""
+    """禁言时长"""
+
+    @classmethod
+    def from_command(cls, data: dict):
+        return cls(
+            uid=data['uid'],
+            uname=data['uname'],
+            operator=data['operator'],
+            vaild_period=data['vaild_period'],
         )
