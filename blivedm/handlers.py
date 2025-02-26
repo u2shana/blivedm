@@ -97,6 +97,8 @@ class BaseHandler(HandlerInterface):
         'INTERACT_WORD': _make_msg_callback('_on_interact_word', web_models.InteractWordMessage),
         # 指定观众禁言
         'ROOM_BLOCK_MSG': _make_msg_callback('_on_room_block', web_models.RoomBlockMessage),
+        # 指定用户加入黑名单，需要房管cookies
+        'ROOM_LIVE_FORBID': _make_msg_callback('_on_room_live_forbid', web_models.RoomLiveForbidMessage),
 
         #
         # 开放平台消息
@@ -164,6 +166,12 @@ class BaseHandler(HandlerInterface):
 
     def _on_interact_word(self, client: ws_base.WebSocketClientBase, message: web_models.InteractWordMessage):
         """进入房间、关注主播等互动消息"""
+
+    def _on_room_block(self, client: ws_base.WebSocketClientBase, message: web_models.RoomBlockMessage):
+        """指定观众禁言"""
+
+    def _on_room_live_forbid(self, client: ws_base.WebSocketClientBase, message: web_models.RoomLiveForbidMessage):
+        """指定用户加入黑名单"""
 
     #
     # 开放平台消息

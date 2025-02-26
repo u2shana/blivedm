@@ -7,9 +7,11 @@ from typing import *
 import aiohttp
 
 import blivedm
+import blivedm.push as push
 import blivedm.models.web as web_models
 from datetime import datetime
 import os
+import asyncio
 
 # 直播间ID的取值看直播间URL
 TEST_ROOM_IDS = [
@@ -40,13 +42,16 @@ async def main():
     finally:
         await session.close()
 	
+def get_current_time():
+    return datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+
 def s_timestamp(timestamp: int) -> str:
     # 创建 datetime 对象
     readable_time = datetime.fromtimestamp(timestamp)
     # 格式化为字符串，保留到毫秒
     s_time = readable_time.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
     return s_time
-	
+
 def init_session():
     cookies = http.cookies.SimpleCookie()
     cookies['SESSDATA'] = SESSDATA
@@ -113,7 +118,11 @@ class MyHandler(blivedm.BaseHandler):
   
     def _on_room_block(self, client: blivedm.BLiveClient, message: web_models.RoomBlockMessage):
         operator = "主播" if message.operator == 2 else "房管"
-        log_message(f'<block ts=" "[{client.room_id}] uid="{message.uid}" user="{message.uname}" operator="{operator}" vaild_period="{message.vaild_period}"')
+        log_message(f'<mute ts=" "[{get_current_time()}] [{client.room_id}] uid="{message.uid}" user="{message.uname}" operator="{operator}" vaild_period="{message.vaild_period}"')
+
+    def _on_room_live_forbid(self, client: blivedm.BLiveClient, message: web_models.RoomLiveForbidMessage):
+        operator = "主播" if message.operator == 2 else "房管"
+        log_message(f'<block ts=" "[{get_current_time()}] [{client.room_id}] uid="{message.uid}" user="{message.uname}" operator="{operator}" operator_uname="{message.operator_uname}"')
 
     # def _on_interact_word(self, client: blivedm.BLiveClient, message: web_models.InteractWordMessage):
     #     if message.msg_type == 1:

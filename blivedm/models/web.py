@@ -518,7 +518,7 @@ class InteractWordMessage:
 @dataclasses.dataclass
 class RoomBlockMessage:
     """
-    进入房间、关注主播等互动消息
+    直播间禁言信息
     """
 
     uid: int = 0
@@ -537,4 +537,28 @@ class RoomBlockMessage:
             uname=data['uname'],
             operator=data['operator'],
             vaild_period=data['vaild_period'],
+        )
+
+@dataclasses.dataclass
+class RoomLiveForbidMessage:
+    """
+    用户加入黑名单信息
+    """
+
+    uid: int = 0
+    """用户ID"""
+    uname: str = ''
+    """用户名"""
+    operator: int = ''
+    """操作者"""
+    operator_uname: str = ""
+    """操作者用户名"""
+
+    @classmethod
+    def from_command(cls, data: dict):
+        return cls(
+            uid=data['uid'],
+            uname=data['uname'],
+            operator=data['operator'],
+            operator_uname=data['operator_uname'],
         )
