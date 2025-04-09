@@ -2,7 +2,6 @@
 __pycache__/
 *.py[cod]
 *$py.class
-sample-dev.py
 
 # C extensions
 *.so
@@ -104,3 +103,5 @@ ENV/
 .pdm-python
 pdm.lock
 pdm.toml
+
+start.sh
