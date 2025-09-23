@@ -94,7 +94,7 @@ class BaseHandler(HandlerInterface):
         # 删除醒目留言
         'SUPER_CHAT_MESSAGE_DELETE': _make_msg_callback('_on_super_chat_delete', web_models.SuperChatDeleteMessage),
         # 进入房间、关注主播等互动消息
-        'INTERACT_WORD': _make_msg_callback('_on_interact_word', web_models.InteractWordMessage),
+        'INTERACT_WORD_V2': _make_msg_callback('_on_interact_word_v2', web_models.InteractWordV2Message),
         # 指定观众禁言
         'ROOM_BLOCK_MSG': _make_msg_callback('_on_room_block', web_models.RoomBlockMessage),
         # 指定用户加入黑名单，需要房管cookies
@@ -164,7 +164,7 @@ class BaseHandler(HandlerInterface):
     def _on_super_chat_delete(self, client: ws_base.WebSocketClientBase, message: web_models.SuperChatDeleteMessage):
         """删除醒目留言"""
 
-    def _on_interact_word(self, client: ws_base.WebSocketClientBase, message: web_models.InteractWordMessage):
+    def _on_interact_word_v2(self, client: ws_base.WebSocketClientBase, message: web_models.InteractWordV2Message):
         """进入房间、关注主播等互动消息"""
 
     def _on_room_block(self, client: ws_base.WebSocketClientBase, message: web_models.RoomBlockMessage):

@@ -124,7 +124,7 @@ class MyHandler(blivedm.BaseHandler):
         operator = "主播" if message.operator == 2 else "房管"
         log_message(f'<block ts=" "[{get_current_time()}] [{client.room_id}] uid="{message.uid}" user="{message.uname}" operator="{operator}" operator_uname="{message.operator_uname}"')
 
-    # def _on_interact_word(self, client: blivedm.BLiveClient, message: web_models.InteractWordMessage):
+    # def _on_interact_word_v2(self, client: blivedm.BLiveClient, message: web_models.InteractWordV2Message):
     #     if message.msg_type == 1:
     #         print(f'[{client.room_id}] {message.username} 进入房间')
 
