@@ -305,7 +305,7 @@ class GiftMessage:
             coin_type=data['coin_type'],
             total_coin=data['total_coin'],
             tid=data['tid'],
-            medal_level=data['medal_info']['medal_level'],
+            medal_level=data['sender_uinfo']['medal']['level'],
         )
 
 
