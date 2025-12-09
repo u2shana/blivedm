@@ -111,7 +111,8 @@ class MyHandler(blivedm.BaseHandler):
         log_message(f'<gift ts=" "[{s_timestamp(message.timestamp)}] [{client.room_id}] uid="{message.uid}" level="{message.medal_level}" user="{message.uname}" giftname="{message.gift_name}" giftcount="{message.num}" cointype="{cointype}瓜子" price="{message.price}">')
 
     def _on_user_toast_v2(self, client: blivedm.BLiveClient, message: web_models.UserToastV2Message):
-        log_message(f'<toast ts=" "[{s_timestamp(message.start_time)}] [{client.room_id}] uid="{message.uid}" user="{message.username}" unit="{message.unit}" count="{message.num}" price="{message.price}" level="{message.guard_level}" {message.toast_msg}>')
+        if message.source != 2:
+            log_message(f'<toast ts=" "[{s_timestamp(message.start_time)}] [{client.room_id}] uid="{message.uid}" user="{message.username}" unit="{message.unit}" count="{message.num}" price="{message.price}" level="{message.guard_level}" {message.toast_msg}>')
 		
     def _on_super_chat(self, client: blivedm.BLiveClient, message: web_models.SuperChatMessage):
         log_message(f'<sc ts=" "[{s_timestamp(message.start_time)}] [{client.room_id}] time="{message.time}" price="{message.price * 1000}" level="{message.medal_level}" uid="{message.uid}" user="{message.uname}"： {message.message}>')

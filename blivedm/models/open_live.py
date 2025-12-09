@@ -55,6 +55,8 @@ class DanmakuMessage:
     """被at的用户昵称"""
     is_admin: int = 0
     """发送弹幕的用户是否是房管，取值范围0或1，取值为1时是房管"""
+    is_mirror: bool = False
+    """是否跨房弹幕"""
 
     @classmethod
     def from_command(cls, data: dict):
@@ -510,4 +512,3 @@ class LiveEndMessage:
             title=data['title'],
             msg_id=data.get('msg_id', ''),  # 官方文档表格里没列出这个字段，但是实际上有
         )
-    
