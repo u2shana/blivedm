@@ -87,7 +87,7 @@ class DanmakuMessage:
     uname_color: str = ''
     """用户名颜色"""
 
-    medal_level: str = ''
+    medal_level: int = 0
     """勋章等级"""
     medal_name: str = ''
     """勋章名"""
@@ -134,7 +134,7 @@ class DanmakuMessage:
             mcolor = info[3][4]
             special_medal = info[3][5]
         else:
-            medal_level = '0'
+            medal_level = 0
             medal_name = ''
             runame = ''
             medal_room_id = 0
@@ -293,7 +293,7 @@ class GiftMessage:
     """总瓜子数"""
     tid: str = ''
     """可能是事务ID，有时和rnd相同"""
-    medal_level: str = ''
+    medal_level: int = 0
     """勋章等级"""
     medal_name: str = ''
     """勋章名"""
@@ -306,12 +306,18 @@ class GiftMessage:
     def from_command(cls, data: dict):
         medal_info = data.get('medal_info', None)
         if medal_info is not None:
-            medal_level = data['sender_uinfo']['medal']['level']
+            sender_uinfo = data.get('sender_uinfo', {}).get('medal')
+			
+            if sender_uinfo:
+                medal_level = sender_uinfo['level']
+            else:
+                medal_level = medal_info['medal_level']
+				
             medal_name = medal_info['medal_name']
             medal_room_id = medal_info['anchor_roomid']
             medal_ruid = medal_info['target_id']
         else:
-            medal_level = '0'
+            medal_level = 0
             medal_name = ''
             medal_room_id = 0
             medal_ruid = 0
@@ -475,7 +481,7 @@ class SuperChatMessage:
     """背景图URL"""
     background_price_color: str = ''
     """背景价格颜色，'#rrggbb'"""
-    medal_level: str = ''
+    medal_level: int = 0
     """勋章等级"""
     medal_name: str = ''
     """勋章名"""
@@ -493,7 +499,7 @@ class SuperChatMessage:
             medal_room_id = medal_info['anchor_roomid']
             medal_ruid = medal_info['target_id']
         else:
-            medal_level = '0'
+            medal_level = 0
             medal_name = ''
             medal_room_id = 0
             medal_ruid = 0
